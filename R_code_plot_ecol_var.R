@@ -7,6 +7,7 @@
 
 # How to install the package? 
 # we are going to use the function "install.packages", and the argument will be the name of the package
+# using brackets because packages, before you install them, are external to the main software
 install.packages("sp")
 
 library(sp)
@@ -51,3 +52,20 @@ pairs(meuse)
 subsetmeuse<-c("cadmium","copper","zinc","lead")
 subsettedmeuse<-meuse[subsetmeuse]
 pairs(subsettedmeuse)
+
+
+#start of the second lecture spent on these ecological variables
+# the columns we are interested in are actually culumn number 3 through to column number 6
+pairs(meuse[,3:6])
+# we use the comma before the 3, to say that this is where we are starting from
+# by default when we do this, R is looking at columns, if you want to subset using rows, you have to use specific functions, such as slice, filter, 
+# R starts counting from 1 rather than 0 (as is the case in Python for instance)
+pairs(~cadmium+zinc+copper+lead, data=meuse)
+# ~ (tilde) means equal in R 
+# [] = alt+shift+(/)
+pairs(meuse[c("cadmium", "copper", "zinc", "lead")])
+
+#rectifying the pairs graph 
+#you have to use brackets when writing in the name of the color 
+# pch is for point character
+pairs(~cadmium+zinc+copper+lead, data=meuse, col="plum1", pch=20, cex= 0.5)
