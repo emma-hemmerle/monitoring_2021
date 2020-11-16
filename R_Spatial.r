@@ -32,3 +32,4 @@ bubble(meuse,"zinc")
 
 #downloading ggplot2 package
 install.packages("ggplot2")
+# There is also the option to download packages from GitHub if it doesn't work from CRAN (is the package is also stored in GitHub). 
