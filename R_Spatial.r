@@ -28,3 +28,7 @@ spplot(meuse,c("zinc","copper"))
 
 #now rather than using colors, let's make use of bubbles of size proportional to the value of the variable in that place 
 bubble(meuse,"zinc")
+
+
+#downloading ggplot2 package
+install.packages("ggplot2")
