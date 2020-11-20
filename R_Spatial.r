@@ -73,4 +73,13 @@ getwd()
 ## read.table function to import data from outside
 ## an alternative is the read.csv function 
 ## header=TRUE means that the table has names (a header) for the variables
+## the first row is just the name of the variables, that way R knows not to use the first row as values
 covid<-read.csv("covid_agg.csv", header=TRUE)
+summary(covid)
+
+## using the ggplot 
+library(ggplot2)
+ggplot(covid, aes(x=lon,y=lat))+geom_point()
+## you obtain a plot with one point per country
+## now changing the size of the points according to the number of cases
+ggplot(covid, aes(x=lon,y=lat, size=cases))+geom_point()
