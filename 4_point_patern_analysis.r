@@ -140,5 +140,4 @@ points(covid_planar, cex=0.5, pch=20)
 dev.off()
 
 
-
 ## next lecture, we will explain what are different coordinate systems
