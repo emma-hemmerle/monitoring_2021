@@ -22,7 +22,7 @@ plot(cases_map, col=cl)
 install.packages("sf")
 library(sf)
 #st_as_sf() is going to take the covid data, and state what the coordinates are
-Spoints<-st_as_sf(covid, woords=c("lon","lat"))
+Spoints<-st_as_sf(covid, coords=c("lon","lat"))
 plot(Spoints, cex=Spoints$cases, col = 'purple3', lwd = 3, add=T)
 plot(Spoints, cex=Spoints$cases/10000, col = 'purple3', lwd = 3, add=T)
 library(rgdal)
