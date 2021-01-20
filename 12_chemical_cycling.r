@@ -102,7 +102,7 @@ dev.off()
 
 #boxplot
 boxplot(EN,horizontal=T,axes=T,outline=F)
-# adding the names of the axes + changing color
+# adding the names of the axes (labels) + changing color
 boxplot(EN, horizontal=T, axis=T, outline=F, xlab="NO2 levels-8bit", ylab="Period",col='red') 
 # we see that in this period, it is mostly the maximal values in NO2 levels that changed from Jan to March
 # max values are higher in Jan than they are at mid term, and at the end of march
