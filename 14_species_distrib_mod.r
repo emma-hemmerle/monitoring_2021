@@ -8,6 +8,7 @@ library(raster)
 #importing species data
 
 # using the system file function so that we can get a file from a specific package 
+# using data that is already inside the package
 # .sph means shapefile 
 file<-system.file("external/species.shp", package="sdm")
 species <- shapefile(file) #we are explaining to R that we are going to use it as a shapefile
@@ -99,3 +100,7 @@ s1 <- stack(preds,p1)
 plot(s1, col=cl)
 # we get 5 images: 1 for each var, and one for the probability of distribution of the species
 
+
+#adding coastlines
+#using readOGR to add the coastlines
+#use line to add on top of your plot for instance
