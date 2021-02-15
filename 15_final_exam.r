@@ -80,29 +80,35 @@ plot(bio_clim)
 dev.off()
 
 # clipping the bioclim rasters to fit our study area 
+cropped_WC01<-crop(WC01, recordsSpatial)
+cropped_WC03<-crop(WC03, recordsSpatial)
+cropped_WC04<-crop(WC04, recordsSpatial)
+cropped_WC05<-crop(WC05, recordsSpatial)
+cropped_WC12<-crop(WC12, recordsSpatial)
+cropped_WC15<-crop(WC15, recordsSpatial)
+cropped_WC17<-crop(WC17, recordsSpatial)
+cropped_bio_clim<-stack(cropped_WC01,cropped_WC03,cropped_WC04,cropped_WC05,cropped_WC12,cropped_WC15,cropped_WC17)
+cropped_bio_clim<-crop(bio_clim, recordsSpatial)
+fun <- function() {
+points(recordsSpatial, pch=20, col='blue4',cex=0.25)
+}
+pdf("cropped_bio_clim_1970_2020.pdf")
+plot(cropped_bio_clim, main=paste0('BIO', c(1,3,4,5,12,15,17)),addfun=fun)
+dev.off()
+
 dir.create('./WORLDCLIM/2.5m_bio_1970_2000/Study Region', recursive=TRUE, showWarnings=FALSE)
-for (i in c(1,3,4,5,12,15,17) {print(paste('Clipping current WORLDCLIM raster', i))
-                 flush.console()    
-                 # get the world raster   
-                 rast <- raster(paste0('./WORLDCLIM/2.5m_bio_1970_2000/wc2.1_2.5m_bio_',ifelse(i < 10, '0', ''), i, '.tif'))
-                 # crop the raster and update metadata
-                 rast <- crop(rast, studyExtent)
-                 rast <- setMinMax(rast)
-                 projection(rast) <-'+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'
-                 # save raster
-                 writeRaster(rast,paste0('./WORLDCLIM/2.5m_bio_1970_2000/Study Region/WC',ifelse(i < 10, '0', ''), i), format='GTiff', datatype='INT2S',overwrite=TRUE)
-                }
-current <- stack(list.files('./WORLDCLIM/2.5m_bio_1970_2000/Study Region',full.names=TRUE,pattern='.tif'))
-plot(current)
+writeRaster(cropped_WC01,paste0('./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC01'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC03,paste0('./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC03'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC04,paste0('./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC04'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC05,paste0('./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC05'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC12,paste0('./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC12'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC15,paste0('./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC15'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC17,paste0('./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC17'), format='GTiff', datatype='INT2S',overwrite=TRUE)
 
+# Saving work done so far:
+save.image('SDM project', compress=TRUE)
 
-rast <- crop(./WORLDCLIM/2.5m_bio_1970_2000/wc2.1_2.5m_bio_1.tif, studyExtent)
-rast <- setMinMax(rast)
-projection(rast) <-'+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'
-     
-
-
-
+# Using WorldClim Data for future projections 
 
 
 
