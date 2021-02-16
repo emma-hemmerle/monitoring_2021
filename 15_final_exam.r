@@ -14,10 +14,9 @@ install.packages("rgbif")
 library(rgbif)
 install.packages("maxnet")
 install.packages("geosphere")
-install.packages("yarrr")
 library(maxnet)
 library(geosphere)
-library(yarrr)
+
 
 
 # downloading species occurence data from GBIF for Bombus affinis
@@ -240,6 +239,8 @@ dev.off()
 ## Ecological relevance analysis based on the results and the methodological choices we have made throughout this project 
 
 
+## saving everything we have done! 
+save.image('SDM project', compress=TRUE)
 
 
 
