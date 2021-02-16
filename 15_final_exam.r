@@ -108,7 +108,32 @@ writeRaster(cropped_WC17,paste0('./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cro
 # Saving work done so far:
 save.image('SDM project', compress=TRUE)
 
-# Using WorldClim Data for future projections 
+# starting off from where we left off again 
+setwd("/Users/emmahemmerle/Documents/EDU/UniBo/S1/Ecosystem Monitoring/R Lab/Final Exam")
+load("/Users/emmahemmerle/Documents/EDU/UniBo/S1/Ecosystem Monitoring/R Lab/Final Exam/SDM Project")
+ls()
+
+
+# running a species distribution model using Maxent 
+# first we need to convert our raster files into .asc 
+writeRaster(cropped_WC01,'./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC01.asc', format='ascii')
+writeRaster(cropped_WC03,'./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC03.asc', format='ascii')
+writeRaster(cropped_WC04,'./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC04.asc', format='ascii')
+writeRaster(cropped_WC05,'./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC05.asc', format='ascii')
+writeRaster(cropped_WC12,'./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC12.asc', format='ascii')
+writeRaster(cropped_WC15,'./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC15.asc', format='ascii')
+writeRaster(cropped_WC17,'./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC17.asc', format='ascii')
+# running maxent with occurence and environmental data
+# we get an .asc output that we convert into a raster in R
+maxentoutput<-read.asciigrid('./maxent/Bombus_affinis.asc')
+plot(maxentoutput)
+raster(maxentoutput) -> rastermaxentoutput
+writeRaster(rastermaxentoutput,'./maxent/rastermaxentoutput', format='GTiff',datatype='INT2S',overwrite=TRUE)
+plot(rastermaxentoutput)
+
+# Downloading and Using WorldClim Data for future projections 
+
+
 
 
 
