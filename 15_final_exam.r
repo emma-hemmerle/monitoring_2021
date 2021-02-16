@@ -14,8 +14,10 @@ install.packages("rgbif")
 library(rgbif)
 install.packages("maxnet")
 install.packages("geosphere")
+install.packages("yarrr")
 library(maxnet)
 library(geosphere)
+library(yarrr)
 
 
 # downloading species occurence data from GBIF for Bombus affinis
@@ -130,6 +132,22 @@ plot(maxentoutput)
 raster(maxentoutput) -> rastermaxentoutput
 writeRaster(rastermaxentoutput,'./maxent/rastermaxentoutput', format='GTiff',datatype='INT2S',overwrite=TRUE)
 plot(rastermaxentoutput)
+
+
+# reclassifying our raster output into present/absent predictions for our species 
+# based on 10 percentile training presence
+predictions<-c(0,0.349,0,0.349,1,1)
+rpredictions<-matrix(predictions,ncol=3,byrow=TRUE)
+predictionsmaxentoutput<-reclassify(rastermaxentoutput,rpredictions)
+
+
+#ploting the predicted distribution of Bombus affinis based on environmental var data 
+cl<-colorRampPalette(c('gray','violetred'))(100)
+pdf("Prediction Distribution of Bombus affinis.pdf")
+plot(predictionsmaxentoutput, col=cl,main="Prediction Distribution of Bombus affinis")
+dev.off()
+
+
 
 # Downloading and Using WorldClim Data for future projections 
 
