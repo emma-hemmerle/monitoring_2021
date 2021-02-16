@@ -139,6 +139,8 @@ plot(rastermaxentoutput)
 predictions<-c(0,0.349,0,0.349,1,1)
 rpredictions<-matrix(predictions,ncol=3,byrow=TRUE)
 predictionsmaxentoutput<-reclassify(rastermaxentoutput,rpredictions)
+writeRaster(predictionsmaxentoutput,'./maxent/predictionsmaxentoutput', format='GTiff',datatype='INT2S',overwrite=TRUE)
+
 
 
 #ploting the predicted distribution of Bombus affinis based on environmental var data 
@@ -147,9 +149,101 @@ pdf("Prediction Distribution of Bombus affinis.pdf")
 plot(predictionsmaxentoutput, col=cl,main="Prediction Distribution of Bombus affinis")
 dev.off()
 
+# testing the goodness of our model
+# omission test combined with binomial test, as well as the Area Under the Receiver Operating Curve (AUC)
+# splitting the data set into two parts in maxent for training and testing (with random test percentage set at 30%)
+# based on 30% test data and 10% minimum training presence we obtain an omission rate of 0.105, as well as a very small p-value
+# the AUC based of the 30% test data is 0.907
+# overall, we can conclude that our model is pretty good! 
 
 
-# Downloading and Using WorldClim Data for future projections 
+###########
+
+WC2061_2080_bio1<-raster('./WORLDCLIM/2.5m_bio_Future/wc2.1_2.5m_bioc_CNRM-CM6-1_ssp245_2061-2080.tif',band=1)
+WC2061_2080_bio3<-raster('./WORLDCLIM/2.5m_bio_Future/wc2.1_2.5m_bioc_CNRM-CM6-1_ssp245_2061-2080.tif',band=3)
+WC2061_2080_bio4<-raster('./WORLDCLIM/2.5m_bio_Future/wc2.1_2.5m_bioc_CNRM-CM6-1_ssp245_2061-2080.tif',band=4)
+WC2061_2080_bio5<-raster('./WORLDCLIM/2.5m_bio_Future/wc2.1_2.5m_bioc_CNRM-CM6-1_ssp245_2061-2080.tif',band=5)
+WC2061_2080_bio12<-raster('./WORLDCLIM/2.5m_bio_Future/wc2.1_2.5m_bioc_CNRM-CM6-1_ssp245_2061-2080.tif',band=12)
+WC2061_2080_bio15<-raster('./WORLDCLIM/2.5m_bio_Future/wc2.1_2.5m_bioc_CNRM-CM6-1_ssp245_2061-2080.tif',band=15)
+WC2061_2080_bio17<-raster('./WORLDCLIM/2.5m_bio_Future/wc2.1_2.5m_bioc_CNRM-CM6-1_ssp245_2061-2080.tif',band=17)
+bio_clim_2061_2080<-stack(WC2061_2080_bio1,WC2061_2080_bio3,WC2061_2080_bio4,WC2061_2080_bio5,WC2061_2080_bio12,WC2061_2080_bio15,WC2061_2080_bio17)
+
+#cropping to the extent we are interested in 
+
+cropped_WC2061_2080_bio1<-crop(WC2061_2080_bio1, recordsSpatial)
+cropped_WC2061_2080_bio3<-crop(WC2061_2080_bio3, recordsSpatial)
+cropped_WC2061_2080_bio4<-crop(WC2061_2080_bio4, recordsSpatial)
+cropped_WC2061_2080_bio5<-crop(WC2061_2080_bio5, recordsSpatial)
+cropped_WC2061_2080_bio12<-crop(WC2061_2080_bio12, recordsSpatial)
+cropped_WC2061_2080_bio15<-crop(WC2061_2080_bio15, recordsSpatial)
+cropped_WC2061_2080_bio17<-crop(WC2061_2080_bio17, recordsSpatial)
+cropped_WC2061_2080<-stack(cropped_WC2061_2080_bio1,cropped_WC2061_2080_bio3,cropped_WC2061_2080_bio4,cropped_WC2061_2080_bio5,cropped_WC2061_2080_bio12,cropped_WC2061_2080_bio15,cropped_WC2061_2080_bio17)
+
+fun <- function() {
+points(recordsSpatial, pch=20, col='blue4',cex=0.25)
+}
+pdf("cropped_bio_clim_2061_2080.pdf")
+plot(cropped_WC2061_2080, main=paste0('BIO', c(1,3,4,5,12,15,17)),addfun=fun)
+dev.off()
+
+# saving individual files in directory
+
+dir.create('./WORLDCLIM/2.5m_bio_Future/Study Region 61-80', recursive=TRUE, showWarnings=FALSE)
+writeRaster(cropped_WC2061_2080_bio1,paste0('./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC2021_2040_bio1'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC2061_2080_bio3,paste0('./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC2021_2040_bio3'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC2061_2080_bio4,paste0('./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC2021_2040_bio4'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC2061_2080_bio5,paste0('./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC2021_2040_bio5'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC2061_2080_bio12,paste0('./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC2021_2040_bio12'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC2061_2080_bio15,paste0('./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC2021_2040_bio15'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+writeRaster(cropped_WC2061_2080_bio17,paste0('./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC2021_2040_bio17'), format='GTiff', datatype='INT2S',overwrite=TRUE)
+
+# converting them to .asc format to use in maxent 
+
+writeRaster(cropped_WC2061_2080_bio1,'./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC01.asc', format='ascii')
+writeRaster(cropped_WC2061_2080_bio3,'./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC03.asc', format='ascii')
+writeRaster(cropped_WC2061_2080_bio4,'./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC04.asc', format='ascii')
+writeRaster(cropped_WC2061_2080_bio5,'./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC05.asc', format='ascii')
+writeRaster(cropped_WC2061_2080_bio12,'./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC12.asc', format='ascii')
+writeRaster(cropped_WC2061_2080_bio15,'./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC15.asc', format='ascii')
+writeRaster(cropped_WC2061_2080_bio17,'./WORLDCLIM/2.5m_bio_Future/Study Region 61-80/cropped_WC17.asc', format='ascii')
+
+# run maxent with the future climate variables 
+# running the occurence and environmental variable data, against the projection layers
+
+
+# importing the maxent output into R
+maxentoutputfuture<-read.asciigrid('./WORLDCLIM/2.5m_bio_Future/projection_output_2/Bombus_affinis_Cresson,_1863_Study Region 61-80.asc')
+plot(maxentoutputfuture)
+raster(maxentoutputfuture) -> rastermaxentoutputfuture
+writeRaster(rastermaxentoutputfuture,'./WORLDCLIM/2.5m_bio_Future/projection_output_2/rastermaxentoutputfuture', format='GTiff',datatype='INT2S',overwrite=TRUE)
+plot(rastermaxentoutputfuture)
+
+
+
+# reclassifying our raster output into present/absent predictions for our species 
+# based on 10 percentile training presence
+futurepredictions<-c(0,0.349,0,0.349,1,1)
+rfuturepredictions<-matrix(futurepredictions,ncol=3,byrow=TRUE)
+futurepredictionsmaxentoutput<-reclassify(rastermaxentoutputfuture,rfuturepredictions)
+writeRaster(futurepredictionsmaxentoutput,'./WORLDCLIM/2.5m_bio_Future/projection_output_2/futurepredictionsmaxentoutput', format='GTiff',datatype='INT2S',overwrite=TRUE)
+
+
+#ploting the predicted distribution of Bombus affinis based on environmental var data 
+cl2<-colorRampPalette(c('grey','cyan'))(100)
+pdf("Prediction Future Distribution of Bombus affinis 2061-2080.pdf")
+plot(futurepredictionsmaxentoutput, col=cl2,main="Prediction Future Distribution of Bombus affinis")
+dev.off()
+
+# Now comparing the distribution predictions based on current climate data, and the ones based on future climate data 
+# intersecting the two results using QGIS to get a final output map 
+
+## Ecological relevance analysis based on the results and the methodological choices we have made throughout this project 
+
+
+
+
+
+
 
 
 
