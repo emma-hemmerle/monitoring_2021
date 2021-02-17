@@ -69,6 +69,7 @@ plot(mat,main="Mean Annual Temperature 1970-2000")
 dev.off()
 
 # creating a stack with all of the variables we have identified as relevant for our study 
+# choosing 7 out of the 19 bio vars available on WorldClim. 
 WC01<-raster('./WORLDCLIM/2.5m_bio_1970_2000/wc2.1_2.5m_bio_1.tif')
 WC03<-raster('./WORLDCLIM/2.5m_bio_1970_2000/wc2.1_2.5m_bio_3.tif')
 WC04<-raster('./WORLDCLIM/2.5m_bio_1970_2000/wc2.1_2.5m_bio_4.tif')
