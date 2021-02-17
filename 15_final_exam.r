@@ -22,6 +22,7 @@ library(geosphere)
 # downloading species occurence data from GBIF for Bombus affinis
 # cleaning up occurence data into clean .csv file 
 
+#plotting occurence coordinates in R
 gbif <- read.csv('./GBIF/occurrences_bombus_affinis_min.csv',header=TRUE, sep=',')
 head(gbif)
 plot(decimalLatitude, decimalLongitude, pch=17, cex=0.35, col='blue')
@@ -38,8 +39,8 @@ plot(recordsSpatial, col='white')
 plot(countries, add=TRUE, col='gray')
 points(recordsSpatial, pch=20, col='black',cex=0.25)
 
-# downloading scaled species distribution map 
-pdf("bombus_affinis_distrib_map.pdf")
+# downloading scaled species occurence map 
+pdf("bombus_affinis_occurrence_map.pdf")
 plot(recordsSpatial, col='white')
 plot(countries, add=TRUE, col='gray')
 points(recordsSpatial, pch=20, col='black',cex=0.25)
@@ -115,7 +116,7 @@ load("/Users/emmahemmerle/Documents/EDU/UniBo/S1/Ecosystem Monitoring/R Lab/Fina
 ls()
 
 
-# running a species distribution model using Maxent 
+# running a species distribution model using Maxent
 # first we need to convert our raster files into .asc 
 writeRaster(cropped_WC01,'./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC01.asc', format='ascii')
 writeRaster(cropped_WC03,'./WORLDCLIM/2.5m_bio_1970_2000/Study Region/cropped_WC03.asc', format='ascii')
@@ -227,7 +228,7 @@ futurepredictionsmaxentoutput<-reclassify(rastermaxentoutputfuture,rfuturepredic
 writeRaster(futurepredictionsmaxentoutput,'./WORLDCLIM/2.5m_bio_Future/projection_output_2/futurepredictionsmaxentoutput', format='GTiff',datatype='INT2S',overwrite=TRUE)
 
 
-#ploting the predicted distribution of Bombus affinis based on environmental var data 
+#ploting the predicted distribution of Bombus affinis based on future environmental var data 
 cl2<-colorRampPalette(c('grey','cyan'))(100)
 pdf("Prediction Future Distribution of Bombus affinis 2061-2080.pdf")
 plot(futurepredictionsmaxentoutput, col=cl2,main="Prediction Future Distribution of Bombus affinis")
